@@ -1,0 +1,10 @@
+{
+  "workspaces": [
+    "C:\\CS\\Agency"
+  ],
+  "extra_repos": [],
+  "skip_remotes": [],
+  "skip_dirs": ["node_modules", ".git", ".venv", "venv", "__pycache__", "Call Recordings"],
+  "lookback_days": 7,
+  "profile_repo": "C:\\Users\\athar\\wannabeaquant"
+}
