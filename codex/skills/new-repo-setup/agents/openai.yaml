@@ -1,0 +1,4 @@
+interface:
+  display_name: "New Repo Setup"
+  short_description: "Initialize local context files for a repository"
+  default_prompt: "Use -repo-setup to initialize this repository for Codex."

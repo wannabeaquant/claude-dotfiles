@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Retro"
+  short_description: "Capture decisions, failures, wins, and next steps"
+  default_prompt: "Use -retro to wrap up this coding session."

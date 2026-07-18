@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+hook_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+python "$hook_dir/git_commit_guard.py" pre-commit
+
+git_dir=$(git rev-parse --git-dir 2>/dev/null || true)
+if [ -n "$git_dir" ]; then
+  case "$git_dir" in
+    /*) local_hook="$git_dir/hooks/pre-commit" ;;
+    *) local_hook="$(pwd)/$git_dir/hooks/pre-commit" ;;
+  esac
+  if [ -x "$local_hook" ]; then
+    "$local_hook" "$@"
+  fi
+fi

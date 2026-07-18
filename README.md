@@ -1,64 +1,74 @@
-# claude-dotfiles
+# Claude Code and Codex dotfiles
 
-Source of truth for my Claude Code configuration. Edit here, run the installer,
-commit, push. Never edit `~/.claude` directly — it gets overwritten on install.
+Source of truth for Atharva's Claude Code and Codex configuration. Edit here,
+run the matching installer, verify, commit, and push. Do not edit installed
+copies directly because installers overwrite them.
 
 ## Layout
 
-```
-home/                  Full personal profile (Windows machine)
-  CLAUDE.md            Global rules (imports PROFILE.md)
-  PROFILE.md           Who I am, how I work, auto-updated observations
-server/                Slim company-safe profile (SSH servers)
-  CLAUDE.md            Behavioral rules only, no personal project context
-hooks/
-  commit_guard.py      PreToolUse: blocks bad commit formats, Claude attribution,
-                       and personal context files in project repos
-skills/
-  new-repo-setup/      Context-file setup at first commit of any new repo
-  verify-frontend-change/  Browser-level verification before "done"
-  session-retro/       End-of-session learning capture (MEMORY/ERRORS/global memory)
-review/
-  weekly_review.py     Weekly Claude-powered pattern review (Windows scheduled task)
-  review_config.json   Which workspaces/repos the review covers
-settings.windows.json  ~/.claude/settings.json for the Windows box (hooks wired)
-install.ps1            Windows installer
-install.sh             Linux/macOS server installer (server profile)
+```text
+home/                       Full personal Claude Code profile
+server/                     Slim company-safe Claude Code profile
+hooks/                      Claude Code PreToolUse commit guard
+skills/                     Claude Code workflow skills
+codex/home/AGENTS.md        Full personal Codex guidance
+codex/server/AGENTS.md      Slim company-safe Codex guidance
+codex/skills/               Codex-native workflow skills
+codex/git-hooks/            Tool-independent Git commit policy
+review/                     Weekly pattern review and scope config
+settings.windows.json       Windows Claude Code settings
+install.ps1                 Windows Claude Code installer
+install.sh                  Server Claude Code installer
+install-codex.ps1           Windows Codex installer
+install-codex.sh            Server Codex installer
+tests/                      Git-guard tests
 ```
 
 ## Install
 
-**Windows (this machine):**
+Windows personal machine:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File install.ps1
+powershell -ExecutionPolicy Bypass -File install-codex.ps1
 ```
 
-**SSH server (company box):**
+Company server after cloning the repo:
+
 ```bash
-git clone https://github.com/wannabeaquant/claude-dotfiles ~/claude-dotfiles
 bash ~/claude-dotfiles/install.sh
+bash ~/claude-dotfiles/install-codex.sh
 ```
-Then authenticate Claude Code on the server once (`claude` → login) if not
-already done via the VS Code extension.
+
+The Codex installer:
+
+- installs global guidance to `~/.codex/AGENTS.md`;
+- installs global skills to `~/.agents/skills`;
+- enables Codex local memories;
+- copies historical Claude memory into `~/.codex/legacy-memory` as a read-only
+  continuity bridge while Codex builds its own memories;
+- installs global Git hooks through `core.hooksPath`, covering commits made by
+  humans or any coding tool while preserving repo-local hooks;
+- backs up existing Codex guidance, config, skills, and hook-path settings;
+- leaves `~/.claude` and the Claude scheduled review untouched.
 
 ## Weekly review
 
-Runs Sundays 23:00 via Windows Task Scheduler (task `WeeklyClaudeReview`,
-registered by `~/.claude/register_weekly_review.bat`). Scope is controlled by
-`review/review_config.json` — add/remove workspaces or repos there and rerun
-`install.ps1`. Manual run: `python ~/.claude/weekly_review.py` (`--dry-run` to
-preview without calling Claude).
+`WeeklyClaudeReview` runs Sundays at 23:00 through Windows Task Scheduler. Its
+scope is defined in `review/review_config.json`. Run it manually with:
 
-## The learning loop
+```powershell
+python "$env:USERPROFILE\.claude\weekly_review.py" --dry-run
+```
 
-1. **During a session**: corrections and decisions land in auto-memory,
-   project MEMORY.md, ERRORS.md (via global rules + session-retro skill).
-2. **Session end**: `session-retro` consolidates — session log, errors,
-   feedback memories, and proposes rules/skills/hooks when a mistake repeats.
-3. **Weekly**: `weekly_review.py` reads everything across active repos,
-   assesses what Claude got right/wrong, auto-appends evidence-based
-   observations to PROFILE.md / CLAUDE.md, and proposes (report-only) new
-   skills and hooks.
-4. **Deterministic failures get promoted out of prose**: recurring mistakes
-   become hooks or skills in this repo, so enforcement stops depending on the
-   model remembering a rule.
+The Codex installer does not replace or reschedule this task automatically.
+The existing job invokes the Claude CLI and pushes the profile report, so
+changing its reviewer backend is an explicit migration choice.
+
+## Learning loop
+
+1. Project decisions and failures stay in local `MEMORY.md` and `ERRORS.md`.
+2. `session-retro` captures end-of-session learning and proposes promotions.
+3. The weekly review analyzes real Git activity and evidence from local docs.
+4. Repeated deterministic failures become hooks or tests; repeatable procedures
+   become skills; judgment calls stay in global or repo guidance.

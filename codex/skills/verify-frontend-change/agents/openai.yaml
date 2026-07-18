@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Frontend Change"
+  short_description: "Browser-check desktop and mobile UI changes"
+  default_prompt: "Use -frontend-change to validate this UI change end to end."
