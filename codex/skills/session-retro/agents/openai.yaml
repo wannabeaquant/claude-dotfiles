@@ -1,4 +1,4 @@
 interface:
   display_name: "Session Retro"
-  short_description: "Capture decisions, failures, wins, and next steps"
-  default_prompt: "Use -retro to wrap up this coding session."
+  short_description: "Detect stopping points and capture session learning"
+  default_prompt: "Use $session-retro to judge whether this is a natural stopping point and capture any durable learning."

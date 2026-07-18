@@ -53,7 +53,7 @@
 - Do not contradict a logged decision without flagging it first.
 - Log decisions immediately when reversing them would cost more than one hour or they affect a public interface.
 - Log failures in `ERRORS.md` when an approach takes two or more attempts. Record what failed, what worked, and the reusable lesson.
-- At a natural stopping point, use the `session-retro` skill to refresh Session Logs and Next Session Priorities.
+- Codex owns detecting natural stopping points; do not wait for Atharva to say "end of session". Use the `session-retro` skill when a substantial task or coherent batch is complete and handed off, Atharva acknowledges completion or shifts topics, no meaningful next action remains, or continuing requires a later user decision. Do not trigger it mid-debugging, after a minor exchange, or while promised work remains.
 - Use Codex local memories as a recall layer, not as the only home for mandatory rules.
 - Treat `~/.codex/legacy-memory` as a read-only bridge from Claude Code history. New learning belongs in Codex memories or the current project's local context files.
 
