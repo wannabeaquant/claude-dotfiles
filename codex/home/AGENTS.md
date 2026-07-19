@@ -29,6 +29,14 @@
 - Read local `MEMORY.md` and `ERRORS.md` when present before proposing architecture or revisiting past decisions.
 - For migrated historical context, read `~/.codex/legacy-memory/MEMORY.md` as an index and load only the task-relevant file. In particular, use the career profile for job decisions, the Polymarket project file for that bot, and the disk-cleanup feedback before deleting cache-like directories.
 
+## Parallel delegation
+
+- Work solo by default. Models should handle ordinary features, bugs, and repo work end to end without artificial delegation.
+- Use subagents when the user requests them, when independent bounded subtasks can make real parallel progress, or when an independent validation pass materially reduces risk.
+- Good fits include separate frontend and backend changes, research alongside implementation, broad repo audits, multiple independent failures, and post-implementation review of substantial changes.
+- Do not delegate trivial, sequential, tightly coupled, or context-heavy work where coordination costs more than it saves.
+- The main agent owns integration, final verification, commits, pushes, and the handoff.
+
 ## Hard stops
 
 - Require explicit approval for deployments, migrations or schema changes, irreversible actions, paid runs over the locally documented threshold, and sending, posting, publishing, or scheduling on Atharva's behalf.
